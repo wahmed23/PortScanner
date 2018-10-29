@@ -25,7 +25,7 @@ def connScan(tgt_host, tgt_port):
     try:
         connSkt = socket(AF_INET, SOCK_STREAM)
         connSkt.connect((tgt_host, tgt_port))
-        connSkt.send('Violent Python')
+        connSkt.sendall(b'Violent Python')
         results = connSkt.recv(100)
         print ('[+] %d/tcp open'% tgt_port)
         print ('[+] '+str(results))
@@ -41,7 +41,7 @@ def main():
     tgt_host = options.tgt_host
     tgt_port = options.tgt_port
     if (tgt_host == None) | (tgt_port == None):
-        print parser.usage
+        print (parser.usage)
         exit(0)
     else:
         portList = [21,22,25,80,443]
