@@ -6,6 +6,7 @@ Created on Oct 28, 2018
 
 import optparse
 from socket import *
+from threading import *
 
 def portScan(hostname, targetPorts):
     IP = gethostbyname(hostname)
@@ -17,10 +18,12 @@ def portScan(hostname, targetPorts):
         setdefaulttimeout(1)
         try:
             for port in targetPorts:
-                connScan(IP, port)
+                t = Thread(target=connScan, args=(IP, int(port)))
+                t.start()
         except:
             pass
 
+ScreenLock = Semaphore(value=1)
 def connScan(tgt_host, tgt_port):
     try:
         tgt_port_int = int(tgt_port)
@@ -28,16 +31,20 @@ def connScan(tgt_host, tgt_port):
         connSkt.connect((tgt_host, tgt_port_int))
         connSkt.sendall(b'Violent Python')
         results = connSkt.recv(100)
+        ScreenLock.acquire()
         print ('[+] %d/tcp open'% tgt_port_int)
         print ('[+] '+results.decode('utf-8'))
-        connSkt.close()
     except:
+        ScreenLock.acquire()
         print('[-] %d/tcp closed'% tgt_port_int)
+    finally:
+        ScreenLock.release()
+        connSkt.close()
 
 def main():
     parser = optparse.OptionParser('usage%prog -H <target_host> -p <target_port>')
     parser.add_option('-H', dest='tgt_host', type='string', help='specify target host')
-    parser.add_option('-p', dest='tgt_port', type='string', help='specify target port[s] seperated by comma')
+    parser.add_option('-p', dest='tgt_port', type='string', help='specify target port[s] separated by comma')
     (options, args) = parser.parse_args()
     tgt_host = options.tgt_host
     tgt_port = str(options.tgt_port).split(',')
