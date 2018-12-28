@@ -5,4 +5,8 @@
 </pydev_pathproperty>
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_VERSION">python interpreter</pydev_property>
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">python3</pydev_property>
+<pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
+<path>/root/Downloads/python-nmap-0.4.1.tar.gz</path>
+<path>/root/Downloads/python-nmap-0.4.1</path>
+</pydev_pathproperty>
 </pydev_project>
